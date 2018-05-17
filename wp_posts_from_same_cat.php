@@ -1,15 +1,13 @@
 <?php
 	$cats_ids = array();
 	if ( $categories = get_the_category() ) {
-		foreach ( $categories as $cat ) {
-			$cats_ids[] = $cat->term_id;
-		}
+		$cats_ids = wp_list_pluck( $categories, 'term_id' );
 	}
 	$args = array(
 		'posts_per_page' => 3,
 		'post__not_in' => array( get_the_ID() ),
 	);
-	if ( $cats_ids ) {
+	if ( ! empty( $cats_ids ) ) {
 		$args['category__in'] = $cats_ids;
 	}
 	query_posts( $args );
